@@ -7,6 +7,9 @@ namespace server.Models;
 public class ServerContext : DbContext
 {
     public DbSet<Product> Products { get; set; }
+    public DbSet<Fact> AboutFacts { get; set; }
+
+
     public ServerContext(DbContextOptions<ServerContext> options) : base(options)
     {
     }
