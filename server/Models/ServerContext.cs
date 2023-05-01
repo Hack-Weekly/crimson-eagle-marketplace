@@ -9,6 +9,7 @@ public class ServerContext : IdentityUserContext<User>
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Fact> AboutFacts { get; set; }
+    public DbSet<Cart> Carts { get; set; }
 
     public ServerContext(DbContextOptions<ServerContext> options) : base(options)
     {
