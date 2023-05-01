@@ -1,16 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from "./pages/Home";
+import ProductDetails from "./pages/ProductDetails";
+import Sidebar from "./components/Sidebar"
+import Header from './components/Header';
+import Footer from './components/Footer';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  return <div className='overflow-hidden bg-zinc-700 text-slate-100'>
+    <Router>
+      <Header />
+      <Routes> 
+        <Route path="/" element={<Home />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+      </Routes>
+      <Sidebar />
+      <Footer />
+    </Router>
+  </div>;
+};
 
-  return (
-    <>
-     <h1 className="text-3xl font-bold underline text-red-500 text-center">Hello world!</h1> 
-    </>
-  )
-}
-
-export default App
+export default App;
