@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 using server.Models;
 
 namespace server.Controllers;
@@ -10,10 +11,12 @@ namespace server.Controllers;
 public class UserController : ControllerBase
 {
     private UserManager<User> userManager;
+    private readonly IMapper _mapper;
 
-    public UserController(ServerContext context, UserManager<User> userMgr)
+    public UserController(ServerContext context, UserManager<User> userMgr, IMapper mapper)
     {
         userManager = userMgr;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -59,9 +62,7 @@ public class UserController : ControllerBase
         if (user == null)
             return NotFound();
 
-        user.UserName = String.IsNullOrEmpty(data.UserName) ? user.UserName : data.UserName;
-        user.Email = String.IsNullOrEmpty(data.Email) ? user.Email : data.Email;
-        user.FullName = String.IsNullOrEmpty(data.FullName) ? user.FullName : data.FullName;
+        user = _mapper.Map<PutUser, User>(data, user);
 
         return HandleResults(user, await userManager.UpdateAsync(user));
     }
@@ -69,7 +70,6 @@ public class UserController : ControllerBase
     [HttpDelete("{email}")]
     public async Task<ActionResult<GetUser>> DeleteUser(string email)
     {
-        //var user = await userManager.FindByIdAsync(id);
         var user = await userManager.FindByEmailAsync(email);
 
         if (user == null)
