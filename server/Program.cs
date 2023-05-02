@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using server.Core;
 using server.Models;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -17,6 +18,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ServerContext>(opt
     => opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ServerContext>()
