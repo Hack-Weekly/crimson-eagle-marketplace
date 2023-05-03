@@ -1,17 +1,16 @@
 import { useContext } from "react";
-import { ProductContext} from "../contexts/ProductContext";
+import { ProductContext, type ProductContextType } from "../contexts/ProductContext";
 import Product from "../components/Product";
-const Home = () => {
-const { products } = useContext(ProductContext);
 
+const Home = () => {
+  const { products } = useContext(ProductContext) as ProductContextType;
   
-//Filter for clothing products from Fakestoreapi
+  //Filter for clothing products from Fakestoreapi
   const filteredProducts = products.filter((item) => {
     return ( 
       item.category === "men's clothing" || item.category === "women's clothing"
   );
   });
-
 
   return (
   <div>
