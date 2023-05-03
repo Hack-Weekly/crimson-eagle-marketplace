@@ -1,0 +1,22 @@
+import { Link } from "react-router-dom"
+import Cart from "../components/Cart"
+
+const CartPage = () => {
+
+    const onCheckout = () => {
+        console.log('Checking out')
+    }
+
+    return (
+        <main className="py-16 px-6">
+            <h1 className="my-6 text-2xl font-medium">Your Cart</h1>
+            <Cart />
+            <div className="w-full py-6 mt-6 border-t-2 border-zinc-500 text-right">
+                <Link className="mr-6 underline text-orange-100 hover:text-orange-400" to="/">Go back to shopping</Link>
+                <button className="px-6 py-3 rounded bg-orange-500 hover:bg-orange-600" onClick={ onCheckout }>Checkout</button>
+            </div>
+        </main>
+    )
+}
+
+export default CartPage

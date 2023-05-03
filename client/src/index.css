@@ -2,3 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+.table {
+	@apply w-full font-primary;
+}
+.table thead {
+	@apply uppercase bg-zinc-500;
+}
+.table th {
+	@apply font-normal;
+}
+.table.full th {
+	@apply font-normal lg:font-medium;
+}
+.table td,
+.table th {
+	@apply px-4 py-2;
+}
+.table.full td,
+.table.full th {
+	@apply px-4 py-2 lg:px-6 lg:py-3;
+}
