@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 
 type CartProductType = {
     id: number,
@@ -25,8 +25,10 @@ type CartWithImageType = {
 const Cart = ({ size = 'full' }: { size?: string }) => {
 
     const [cart, setCart] = useState<CartWithImageType | null>(null)
+    const [beingModified, setModified] = useState<number | null>(null)
+    const [quantity, setQuantity] = useState<number>(0)
 
-    useEffect(() => {
+    const fetchCart = () => {
         fetch('https://dummyjson.com/carts/1')
             .then(res => res.json())
             .then(async data => {
@@ -44,10 +46,49 @@ const Cart = ({ size = 'full' }: { size?: string }) => {
                     products: products,
                 })
             })
+            .catch(console.log)
+    }
+
+    useEffect(() => {
+        fetchCart()
     }, [])
 
     const onDelete = (id: number) => {
-        console.log('Delete button clicked for ' + id)
+        // `https://[api]/cart/${ 'email' }/${ id }`
+        fetch('https://dummyjson.com/carts/1', { method: 'DELETE' })
+            .then(() => {
+                // fetchCart() ?
+                cart && setCart({
+                    ...cart,
+                    products: cart.products.filter(p => p.id != id),
+                })
+            })
+            .catch(console.log)
+    }
+
+    const onQuantityChange = (id: number, quantity: number) => {
+        setQuantity(quantity)
+        setModified(id)
+    }
+
+    const onQuantitySubmit = (event: FormEvent, id: number) => {
+        event.preventDefault()
+        if (quantity < 1) {
+            onDelete(id)
+            setModified(null)
+        } else {
+            // `https://[api]/cart/${ 'email' }/${ id }/${ quantity}`
+            fetch('https://dummyjson.com/carts/1', { method: 'PUT' })
+            .then(() => {
+                // fetchCart() ?
+                cart && setCart({
+                    ...cart,
+                    products: cart.products.map(p => (p.id == id) ? {...p, quantity } : p),
+                })
+                setModified(null)
+            })
+            .catch(console.log)
+        }
     }
 
     return (
@@ -75,7 +116,26 @@ const Cart = ({ size = 'full' }: { size?: string }) => {
                         { size == 'full' &&
                             <td className="text-right">{ product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }</td>
                         }
-                        <td className="text-right">{ product.quantity }</td>
+                        <td className="text-right">
+                            { beingModified == product.id ?
+                                <form className="flex" onSubmit={ (e) => onQuantitySubmit(e, product.id) }>
+                                    <input type="hidden" name="id" value={ product.id } />
+                                    <input className="w-16 px-2 py-1 bg-zinc-500 text-zinc-50 border border-zinc-800"
+                                        type="number" name="quantity" min="0" max="10"
+                                        value={ quantity } onChange={ (e) => setQuantity(e.currentTarget.valueAsNumber) } />
+                                    <button className="ml-2 p-1 rounded hover:bg-zinc-500" type="submit">
+                                        <svg className="w-6 h-6 fill-none stroke-green-500"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={1.5}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                            <title>Set quantity</title>
+                                        </svg>
+                                    </button>
+                                </form>
+                                : <button className="px-3 py-2 rounded hover:bg-zinc-500" onClick={ () => onQuantityChange(product.id, product.quantity) }>
+                                    { product.quantity }
+                                </button>
+                            }                            
+                        </td>
                         <td className="text-right">
                             { size == 'full' && product.discountedPrice != product.total 
                                 ? <span className="mr-2 text-zinc-300 line-through text-xs lg:text-sm">{ product.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }</span> 
