@@ -5,6 +5,7 @@ import Sidebar from "./components/Sidebar"
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
 
 const App = () => {
   return <div className='overflow-hidden bg-zinc-700 text-slate-100'>
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
       <Sidebar />
       <Footer />

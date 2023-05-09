@@ -4,6 +4,7 @@ import { FiTrash2 } from "react-icons/fi";
 import CartItem  from "../components/CartItem";
 import { useContext } from "react";
 import { SidebarContext } from "../contexts/SidebarContext";
+import Cart from "./Cart";
 
 const Sidebar = () => {
   const { isOpen, handleClose } = useContext(SidebarContext)
@@ -19,6 +20,7 @@ const Sidebar = () => {
         <IoMdArrowForward className="text-2xl"/>
       </div>
     </div>
+    <Cart size="small" />
   </div>
   );
 };
